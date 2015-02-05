@@ -27,8 +27,9 @@ https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Datas
 **In this repository:**
 
 CodeBook.md: information about raw and tidy data set and what was made to transform them
-LICENSE: license terms for text and code
+
 README.md: current file
+
 run_analysis.R: R script to transform raw data set in a tidy one
 
 **How to create the tidy data set:**
