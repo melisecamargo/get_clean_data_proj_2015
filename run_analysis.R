@@ -1,7 +1,19 @@
 require(plyr)
-
+# Download data
+fileURL <- 'https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip'
+# Local data file
+dataFileZIP <- "./getdata-projectfiles-UCI-HAR-Dataset.zip"
+# Directory
+uci_hard_dir <- "./UCI HAR Dataset"
+# Download the dataset (. ZIP), if it does not exist
+if (file.exists(dataFileZIP) == FALSE) {
+    download.file(fileURL, destfile = dataFileZIP)
+}
+# Unzip data file
+if (file.exists(uci_hard_dir) == FALSE) {
+    unzip(dataFileZIP)
+}
 # Directories and files
-uci_hard_dir <- "UCI\ HAR\ Dataset"
 feature_file <- paste(uci_hard_dir, "/features.txt", sep = "")
 activity_labels_file <- paste(uci_hard_dir, "/activity_labels.txt", sep = "")
 x_train_file <- paste(uci_hard_dir, "/train/X_train.txt", sep = "")
@@ -24,7 +36,6 @@ subject_test <- read.table(subject_test_file)
 ##################################################################
 # 1. Merges the training and the test sets to create one data set.
 ##################################################################
-
 # Binding sensor data
 training_sensor_data <- cbind(cbind(x_train, subject_train), y_train)
 test_sensor_data <- cbind(cbind(x_test, subject_test), y_test)
@@ -37,14 +48,35 @@ names(sensor_data) <- sensor_labels
 ############################################################################################
 # 2. Extracts only the measurements on the mean and standard deviation for each measurement.
 ############################################################################################
-
 sensor_data_mean_std <- sensor_data[,grepl("mean|std|Subject|ActivityId", names(sensor_data))]
 
 ###########################################################################
 # 3. Uses descriptive activity names to name the activities in the data set
 ###########################################################################
-
 sensor_data_mean_std <- join(sensor_data_mean_std, activity_labels, by = "ActivityId", match = "first")
 sensor_data_mean_std <- sensor_data_mean_std[,-1]
 
 ##############################################################
+# 4. Appropriately labels the data set with descriptive names.
+##############################################################
+# Remove parentheses
+names(sensor_data_mean_std) <- gsub('\\(|\\)',"",names(sensor_data_mean_std), perl = TRUE)
+# Make syntactically valid names
+names(sensor_data_mean_std) <- make.names(names(sensor_data_mean_std))
+# Make clearer names
+names(sensor_data_mean_std) <- gsub('Acc',"Acceleration",names(sensor_data_mean_std))
+names(sensor_data_mean_std) <- gsub('GyroJerk',"AngularAcceleration",names(sensor_data_mean_std))
+names(sensor_data_mean_std) <- gsub('Gyro',"AngularSpeed",names(sensor_data_mean_std))
+names(sensor_data_mean_std) <- gsub('Mag',"Magnitude",names(sensor_data_mean_std))
+names(sensor_data_mean_std) <- gsub('^t',"TimeDomain.",names(sensor_data_mean_std))
+names(sensor_data_mean_std) <- gsub('^f',"FrequencyDomain.",names(sensor_data_mean_std))
+names(sensor_data_mean_std) <- gsub('\\.mean',".Mean",names(sensor_data_mean_std))
+names(sensor_data_mean_std) <- gsub('\\.std',".StandardDeviation",names(sensor_data_mean_std))
+names(sensor_data_mean_std) <- gsub('Freq\\.',"Frequency.",names(sensor_data_mean_std))
+names(sensor_data_mean_std) <- gsub('Freq$',"Frequency",names(sensor_data_mean_std))
+
+######################################################################################################################
+# 5. Creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+######################################################################################################################
+sensor_avg_by_act_sub = ddply(sensor_data_mean_std, c("Subject","Activity"), numcolwise(mean))
+write.table(sensor_avg_by_act_sub, file = "sensor_avg_by_act_sub.txt")
