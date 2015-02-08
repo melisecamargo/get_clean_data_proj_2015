@@ -30,12 +30,14 @@ https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Datas
 *README.md:* current file
 *run_analysis.R:* R script to transform raw data set in a tidy one
 
-**How to create the tidy data set:**
+**How `run_analysis.R` works to create the tidy data set:**
 
-1. Clone this repository: git clone git@github.com:melisecamargo/get_clean_data_proj_2015.git
-2. Download compressed raw data
-3. Unzip raw data and copy the directory UCI HAR Dataset to the cloned repository root directory
-4. Open a R console and set the working directory to the repository root (use setwd())
-5. Source run_analisys.R script (it requires the plyr package): source('run_analysis.R')
+1. Checks if the file exists, otherwise it downloads it;
+2. Checks if the file has already been extracted to the directory;
+3. Load both test and train data;
+4. Load the features and activity labels;
+5. Extract the mean and standard deviation column names and data;
+6. Process the data;
+7. Merge and creates data set.
 
-In the repository root directory you find the file sensor_avg_by_act_sub.txt with the tidy data set.
+The result is saved as "tidyDataAVG.txt".
