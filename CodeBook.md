@@ -4,11 +4,11 @@ The raw data sets are processed with run_analisys.R script to create a tidy data
 
 **Merge training and test sets**
 
-Test and tranining data (X_train.tx, X_test.txt), subject ids(subject_train.tx, subject_test.txt) and activity ids (y_train.txt, y_test.txt) are merged to obtain a single data set. Variables are labelled with the names assigned by the original collectors (features.txt)
+Test and tranining data (X_train.tx, X_test.txt), subject ids (subject_train.tx, subject_test.txt) and activity ids (y_train.txt, y_test.txt) are merged to obtain a single data set. Variables are labelled with the names assigned by the original collectors (features.txt)
 
 **Extract mean and standard deviation variables**
 
-From the merged data set is extracted an intermidiate data set with only the values of estimated mean (variables in which labels contain "mean") and standard deviation (variables in which labels contain "std").
+An intermediate data set with only the values of estimated mean (variables in which labels contain "mean") and standard deviation (variables in which labels contain "std") is extracted from the merged data set.
 
 **Use descriptive activity names**
 
